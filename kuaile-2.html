@@ -105,7 +105,6 @@
         color: #856404;
       }
 
-      /* 分类拖拽容器 */
       .categories-container {
         display: flex;
         flex-direction: column;
@@ -159,7 +158,6 @@
         font-size: 0.7rem;
         cursor: pointer;
       }
-      /* 菜品拖拽列表 */
       .sortable-list {
         list-style: none;
         margin: 0;
@@ -329,7 +327,7 @@
         renderEditor();
       }
 
-      // 完整菜单数据（按图片录入）
+      // 完整菜单数据（新菜品添加到末尾，所以顺序按图片菜单排列）
       const defaultMenu = {
         "🍲 招牌必点": [
           { name: "海蚌炖土鸭", price: 188, unit: "份", img: "" },
@@ -451,7 +449,6 @@
                 </div>
             `;
 
-          // 菜品列表容器
           const listContainer = document.createElement("ul");
           listContainer.className = "sortable-list";
           listContainer.setAttribute("data-category", category);
@@ -493,7 +490,6 @@
             handle: ".drag-cat-handle",
             animation: 300,
             onEnd: () => {
-              // 重新排序 menuData
               const newMenuData = {};
               catContainer
                 .querySelectorAll(".category-item")
@@ -503,7 +499,6 @@
                     newMenuData[catName] = menuData[catName];
                   }
                 });
-              // 清空并重新赋值
               Object.keys(menuData).forEach((k) => delete menuData[k]);
               Object.assign(menuData, newMenuData);
               saveToLocal();
@@ -511,7 +506,7 @@
           });
         }
 
-        // 初始化每个分类内的菜品拖拽
+        // 初始化菜品拖拽
         document.querySelectorAll(".sortable-list").forEach((list) => {
           const category = list.getAttribute("data-category");
           const sortable = new Sortable(list, {
@@ -581,6 +576,7 @@
         );
       }
 
+      // 新菜品添加到末尾（使用 push）
       function addItem(category) {
         menuData[category].push({
           name: "新菜品",
@@ -616,7 +612,6 @@
       }
 
       function saveAll() {
-        // 收集所有输入框的值
         document.querySelectorAll(".sortable-list").forEach((list) => {
           const category = list.getAttribute("data-category");
           const newOrder = [];

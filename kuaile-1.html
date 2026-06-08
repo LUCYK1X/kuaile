@@ -127,6 +127,7 @@
       }
       .category-nav {
         overflow-x: auto;
+        overflow-y: hidden;
         white-space: nowrap;
         padding: 8px 16px;
         background: white;
@@ -135,6 +136,18 @@
         top: 0;
         z-index: 10;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+      }
+      .category-nav::-webkit-scrollbar {
+        height: 4px;
+      }
+      .category-nav::-webkit-scrollbar-track {
+        background: #f0e4d4;
+        border-radius: 4px;
+      }
+      .category-nav::-webkit-scrollbar-thumb {
+        background: #c23b22;
+        border-radius: 4px;
       }
       .category-nav::-webkit-scrollbar {
         display: none;
