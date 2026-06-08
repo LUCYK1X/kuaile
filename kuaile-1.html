@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
+    />
+    <title>筷乐小院 · 晚餐夜宵 · 包厢预订</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, "Segoe UI", "PingFang SC", Roboto, "Helvetica Neue",
+          sans-serif;
+        background: #f5efe6;
+        color: #2c2418;
+        line-height: 1.5;
+      }
+
+      .page {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #fffcf8;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        min-height: 100vh;
+      }
+
+      .top-deco {
+        height: 4px;
+        background: linear-gradient(90deg, #c23b22, #d4953a, #c23b22);
+      }
+
+      .header {
+        text-align: center;
+        padding: 30px 20px 20px;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2)),
+          url("https://picsum.photos/800/300?random=1");
+        background-size: cover;
+        background-position: center;
+        color: white;
+      }
+
+      .store-name {
+        font-size: 2.2rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        margin-bottom: 6px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      .slogan {
+        font-size: 0.85rem;
+        margin-top: 8px;
+        letter-spacing: 1px;
+        opacity: 0.9;
+      }
+
+      .divider {
+        width: 50px;
+        height: 2px;
+        background: #d4953a;
+        margin: 15px auto;
+      }
+
+      .info-card {
+        background: white;
+        margin: 0 16px 16px;
+        padding: 14px 18px;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0e4d4;
+      }
+
+      .status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .status-badge {
+        background: #c23b22;
+        color: #f5e6c8;
+        padding: 4px 14px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+
+      .hours {
+        font-size: 0.8rem;
+        color: #8b7355;
+      }
+
+      .quick-links {
+        display: flex;
+        gap: 12px;
+        margin: 16px 16px 20px;
+      }
+
+      .quick-btn {
+        flex: 1;
+        background: #fff5ea;
+        text-align: center;
+        padding: 12px 0;
+        border-radius: 40px;
+        text-decoration: none;
+        color: #c23b22;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid #f0e0d0;
+        transition: 0.2s;
+      }
+
+      .quick-btn:hover {
+        background: #c23b22;
+        color: white;
+      }
+
+      .section {
+        margin: 20px 16px;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #c23b22;
+        padding-left: 12px;
+        border-left: 3px solid #d4953a;
+        margin-bottom: 14px;
+      }
+
+      .room-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .room-card {
+        background: white;
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid #f0e4d4;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .room-icon {
+        font-size: 2rem;
+      }
+
+      .room-info {
+        flex: 1;
+      }
+
+      .room-name {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #c23b22;
+      }
+
+      .room-desc {
+        font-size: 0.75rem;
+        color: #8b7355;
+        margin-top: 4px;
+      }
+
+      .room-count {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #d4953a;
+      }
+
+      /* 带图片的菜品样式 */
+      .menu-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .menu-item {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #f0e4d4;
+        overflow: hidden;
+        display: flex;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .menu-img {
+        width: 70px;
+        height: 70px;
+        border-radius: 12px;
+        object-fit: cover;
+        background: #f0e4d4;
+        flex-shrink: 0;
+      }
+
+      .menu-info {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .menu-name {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #2c2418;
+      }
+
+      .menu-price {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #c23b22;
+      }
+
+      .address-card {
+        background: #fff5ea;
+        margin: 0 16px 16px;
+        padding: 16px 18px;
+        border-radius: 16px;
+        text-align: center;
+        border: 1px solid #f0e0d0;
+      }
+
+      .footer-info {
+        background: #2c2418;
+        color: #d4c5ae;
+        text-align: center;
+        padding: 24px 20px;
+        margin-top: 30px;
+      }
+
+      .footer-info p {
+        margin: 6px 0;
+        font-size: 0.8rem;
+      }
+
+      .footer-info a {
+        color: #d4953a;
+        text-decoration: none;
+      }
+
+      .phone-big {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #d4953a;
+        margin: 10px 0;
+        letter-spacing: 1px;
+      }
+
+      /* 后台入口小按钮 */
+      .admin-link {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #c23b22;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        padding: 8px 16px;
+        font-size: 0.7rem;
+        text-decoration: none;
+        opacity: 0.6;
+        z-index: 100;
+      }
+
+      .admin-link:hover {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="top-deco"></div>
+
+      <div class="header">
+        <div class="store-name">筷乐小院</div>
+        <div class="slogan">晚餐 · 夜宵 · 把酒言欢</div>
+        <div class="divider"></div>
+      </div>
+
+      <div class="info-card">
+        <div class="status-row">
+          <span class="status-badge" id="statusBadge">● 营业中</span>
+          <span class="hours">🕘 15:00 - 02:00 | 周一至周日</span>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <a href="tel:18960634499" class="quick-btn">📞 订餐/订包厢</a>
+        <a href="#" class="quick-btn" id="mapBtn">🗺️ 一键导航</a>
+      </div>
+
+      <div class="section">
+        <div class="section-title">🏠 包厢·雅座</div>
+        <div class="room-grid">
+          <div class="room-card">
+            <div class="room-icon">🚪</div>
+            <div class="room-info">
+              <div class="room-name">独立包厢</div>
+              <div class="room-desc">
+                共6个包厢 · 可坐12-15人 · 适合聚餐/宴请
+              </div>
+            </div>
+            <div class="room-count">6间</div>
+          </div>
+          <div class="room-card">
+            <div class="room-icon">🌳</div>
+            <div class="room-info">
+              <div class="room-name">露天雅座</div>
+              <div class="room-desc">共3桌 · 可坐6-8人 · 适合小酌/夜宵</div>
+            </div>
+            <div class="room-count">3桌</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="address-card">
+        <div class="icon">📍</div>
+        <div class="address-text">福建省南平市浦城县兴华路295号</div>
+        <div style="font-size: 0.7rem; color: #b87c4a; margin-top: 6px">
+          🅿️ 门口可停车 | 包厢请提前预订
+        </div>
+      </div>
+
+      <!-- 菜单容器 - 动态加载 -->
+      <div id="menuContainer"></div>
+
+      <div class="footer-info">
+        <p>📍 福建省南平市浦城县兴华路295号</p>
+        <div class="phone-big">📞 189-6063-4499</div>
+        <p>🕘 营业时间：下午15:00 - 凌晨02:00</p>
+        <p>🏠 6个包厢（12-15人）| 🌳 3张露天桌（6-8人）</p>
+        <p>
+          <a href="#" id="footerMapBtn">🗺️ 点击导航</a> &nbsp;|&nbsp;
+          包厢请提前预订
+        </p>
+        <p style="margin-top: 12px; font-size: 0.7rem">
+          © 2026 筷乐小院 | 晚餐 · 夜宵 · 把酒言欢
+        </p>
+      </div>
+    </div>
+
+    <a href="admin.html" class="admin-link">🔧 管理菜单</a>
+
+    <script>
+      // 营业状态
+      function updateStatus() {
+        const now = new Date();
+        const currentHour = now.getHours();
+        let isOpen =
+          (currentHour >= 15 && currentHour <= 23) ||
+          currentHour === 0 ||
+          currentHour === 1;
+        const badge = document.getElementById("statusBadge");
+        if (isOpen) {
+          badge.innerHTML = "● 营业中";
+          badge.style.background = "#c23b22";
+        } else {
+          badge.innerHTML = "● 休息中";
+          badge.style.background = "#8b7355";
+        }
+      }
+      updateStatus();
+
+      // 地图导航
+      function openMap() {
+        window.location.href = `https://uri.amap.com/marker?position=118.541,27.917&name=筷乐小院&callnative=1`;
+        setTimeout(() => {
+          window.open(
+            `https://www.amap.com/search?query=浦城县兴华路295号&city=南平`,
+            "_blank",
+          );
+        }, 500);
+      }
+
+      document.querySelectorAll("#mapBtn, #footerMapBtn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          openMap();
+        });
+      });
+
+      // ========== 加载菜单数据 ==========
+      function loadMenu() {
+        const saved = localStorage.getItem("kuaileMenu");
+        let menuData;
+        if (saved) {
+          menuData = JSON.parse(saved);
+        } else {
+          // 默认菜单数据（含图片）
+          menuData = {
+            招牌必点: [
+              {
+                name: "海蚌炖土鸭",
+                price: "¥188",
+                img: "https://picsum.photos/200/150?random=10",
+              },
+              {
+                name: "牛排锅",
+                price: "¥188",
+                img: "https://picsum.photos/200/150?random=11",
+              },
+              {
+                name: "肥肠鸡",
+                price: "¥158",
+                img: "https://picsum.photos/200/150?random=12",
+              },
+              {
+                name: "红烧鳝段",
+                price: "¥158",
+                img: "https://picsum.photos/200/150?random=13",
+              },
+              {
+                name: "黄鳝锅",
+                price: "¥158",
+                img: "https://picsum.photos/200/150?random=14",
+              },
+            ],
+            "炖罐·汤品": [
+              {
+                name: "三鲜汤",
+                price: "¥98",
+                img: "https://picsum.photos/200/150?random=20",
+              },
+              {
+                name: "筒骨鱼丸汤",
+                price: "¥88",
+                img: "https://picsum.photos/200/150?random=21",
+              },
+              {
+                name: "筒骨玉米汤",
+                price: "¥88",
+                img: "https://picsum.photos/200/150?random=22",
+              },
+              {
+                name: "筒骨目鱼香菇汤",
+                price: "¥88",
+                img: "https://picsum.photos/200/150?random=23",
+              },
+              {
+                name: "排骨玉米汤",
+                price: "¥78",
+                img: "https://picsum.photos/200/150?random=24",
+              },
+              {
+                name: "泥鳅芋子锅",
+                price: "¥78",
+                img: "https://picsum.photos/200/150?random=25",
+              },
+              {
+                name: "黄骨鱼豆腐汤",
+                price: "¥68",
+                img: "https://picsum.photos/200/150?random=26",
+              },
+              {
+                name: "荷包蛋煎黄骨鱼",
+                price: "¥68",
+                img: "https://picsum.photos/200/150?random=27",
+              },
+              {
+                name: "鱼头豆腐锅",
+                price: "¥78",
+                img: "https://picsum.photos/200/150?random=28",
+              },
+              {
+                name: "金汤酸菜汤",
+                price: "¥88",
+                img: "https://picsum.photos/200/150?random=29",
+              },
+              {
+                name: "猪皮蛋菇酸辣汤",
+                price: "¥22",
+                img: "https://picsum.photos/200/150?random=30",
+              },
+            ],
+            "干锅·硬菜": [
+              {
+                name: "干锅三腊",
+                price: "¥78",
+                img: "https://picsum.photos/200/150?random=40",
+              },
+              {
+                name: "干锅肥肠",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=41",
+              },
+              {
+                name: "干锅田鸡",
+                price: "¥48",
+                img: "https://picsum.photos/200/150?random=42",
+              },
+              {
+                name: "干锅鹿茸菇",
+                price: "¥38",
+                img: "https://picsum.photos/200/150?random=43",
+              },
+              {
+                name: "干锅土豆片",
+                price: "¥28",
+                img: "https://picsum.photos/200/150?random=44",
+              },
+              {
+                name: "水煮牛肉",
+                price: "¥68",
+                img: "https://picsum.photos/200/150?random=45",
+              },
+              {
+                name: "泡椒田鸡",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=46",
+              },
+            ],
+            "小炒·风味": [
+              {
+                name: "农家小炒肉",
+                price: "¥28",
+                img: "https://picsum.photos/200/150?random=50",
+              },
+              {
+                name: "爆炒牛肉",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=51",
+              },
+              {
+                name: "红烧肉",
+                price: "¥38",
+                img: "https://picsum.photos/200/150?random=52",
+              },
+              {
+                name: "糖醋排骨",
+                price: "¥48",
+                img: "https://picsum.photos/200/150?random=53",
+              },
+              {
+                name: "椒盐排骨",
+                price: "¥48",
+                img: "https://picsum.photos/200/150?random=54",
+              },
+              {
+                name: "红烧猪蹄",
+                price: "¥88",
+                img: "https://picsum.photos/200/150?random=55",
+              },
+              {
+                name: "清汤猪蹄",
+                price: "¥88",
+                img: "https://picsum.photos/200/150?random=56",
+              },
+              {
+                name: "爆炒鳝片",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=57",
+              },
+              {
+                name: "酸辣鸡爪",
+                price: "¥68",
+                img: "https://picsum.photos/200/150?random=58",
+              },
+              {
+                name: "卤水拼盘",
+                price: "¥68",
+                img: "https://picsum.photos/200/150?random=59",
+              },
+              {
+                name: "五香卷双拼",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=60",
+              },
+              {
+                name: "秘制酱鸭",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=61",
+              },
+              {
+                name: "煎河鱼",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=62",
+              },
+              {
+                name: "溜鱼片",
+                price: "¥38",
+                img: "https://picsum.photos/200/150?random=63",
+              },
+            ],
+            "主食·小吃": [
+              {
+                name: "炒面",
+                price: "时价",
+                img: "https://picsum.photos/200/150?random=70",
+              },
+              {
+                name: "手工水饺",
+                price: "时价",
+                img: "https://picsum.photos/200/150?random=71",
+              },
+              {
+                name: "手工麻糍",
+                price: "时价",
+                img: "https://picsum.photos/200/150?random=72",
+              },
+              {
+                name: "酸辣淮山",
+                price: "¥26",
+                img: "https://picsum.photos/200/150?random=73",
+              },
+              {
+                name: "淮山木耳荷兰豆",
+                price: "¥26",
+                img: "https://picsum.photos/200/150?random=74",
+              },
+              {
+                name: "豆干酸菜",
+                price: "¥22",
+                img: "https://picsum.photos/200/150?random=75",
+              },
+            ],
+            "🌙 夜宵推荐": [
+              {
+                name: "椒盐小河虾",
+                price: "¥58",
+                img: "https://picsum.photos/200/150?random=80",
+              },
+              {
+                name: "椒盐鸭头",
+                price: "¥12/个",
+                img: "https://picsum.photos/200/150?random=81",
+              },
+              {
+                name: "小田螺",
+                price: "¥20",
+                img: "https://picsum.photos/200/150?random=82",
+              },
+              {
+                name: "大田螺煲",
+                price: "¥38",
+                img: "https://picsum.photos/200/150?random=83",
+              },
+              {
+                name: "酸辣鸭头",
+                price: "¥12/个",
+                img: "https://picsum.photos/200/150?random=84",
+              },
+            ],
+          };
+        }
+        renderMenu(menuData);
+      }
+
+      function renderMenu(menuData) {
+        const container = document.getElementById("menuContainer");
+        container.innerHTML = "";
+
+        for (const [category, items] of Object.entries(menuData)) {
+          const sectionDiv = document.createElement("div");
+          sectionDiv.className = "section";
+
+          const titleDiv = document.createElement("div");
+          titleDiv.className = "section-title";
+          titleDiv.innerHTML = category;
+          sectionDiv.appendChild(titleDiv);
+
+          const gridDiv = document.createElement("div");
+          gridDiv.className = "menu-grid";
+
+          items.forEach((item) => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "menu-item";
+            itemDiv.innerHTML = `
+                    <img class="menu-img" src="${item.img || "https://picsum.photos/200/150?random=1"}" alt="${item.name}" onerror="this.src='https://picsum.photos/200/150?random=1'">
+                    <div class="menu-info">
+                        <span class="menu-name">${escapeHtml(item.name)}</span>
+                        <span class="menu-price">${escapeHtml(item.price)}</span>
+                    </div>
+                `;
+            gridDiv.appendChild(itemDiv);
+          });
+
+          sectionDiv.appendChild(gridDiv);
+          container.appendChild(sectionDiv);
+        }
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function (m) {
+          if (m === "&") return "&amp;";
+          if (m === "<") return "&lt;";
+          if (m === ">") return "&gt;";
+          return m;
+        });
+      }
+
+      // 初始化
+      loadMenu();
+
+      // 监听 localStorage 变化（当后台修改时自动更新）
+      window.addEventListener("storage", function (e) {
+        if (e.key === "kuaileMenu") {
+          loadMenu();
+        }
+      });
+    </script>
+  </body>
+</html>
