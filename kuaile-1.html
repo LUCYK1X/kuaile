@@ -372,6 +372,8 @@
         opacity: 1;
         visibility: visible;
       }
+
+      /* 移动端适配 */
       @media (max-width: 480px) {
         .store-name {
           font-size: 1.5rem;
@@ -393,7 +395,28 @@
           padding: 4px 12px;
           font-size: 0.75rem;
         }
+        .cart-bar {
+          padding: 10px 16px;
+        }
+        .cart-total {
+          padding: 4px 10px;
+          font-size: 0.8rem;
+        }
+        .booking-btn {
+          font-size: 0.85rem;
+          padding: 10px 16px;
+        }
+        .modal-content {
+          padding: 20px;
+        }
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea {
+          padding: 10px;
+          font-size: 0.85rem;
+        }
       }
+
       @media (max-width: 380px) {
         .menu-item {
           flex-wrap: wrap;
@@ -405,6 +428,15 @@
         .menu-info {
           width: 100%;
         }
+      }
+
+      /* 触摸优化 */
+      button,
+      .category-item,
+      .cart-bar,
+      .add-btn,
+      .qty-btn {
+        touch-action: manipulation;
       }
     </style>
   </head>
@@ -444,7 +476,7 @@
       </div>
       <div class="cart-bar" id="cartBar">
         <span>🛒 购物车</span>
-        <span class="cart-total" id="cartTotalBtn">¥0</span>
+        <span class="cart-total" id="cartTotalBtn">0元</span>
       </div>
 
       <div id="cartModal" class="modal">
@@ -461,7 +493,7 @@
               justify-content: space-between;
             "
           >
-            <span>总计：<span id="cartTotalPrice">¥0</span></span>
+            <span>总计：<span id="cartTotalPrice">0元</span></span>
             <span id="cartItemCount">(0道菜)</span>
           </div>
           <div style="display: flex; gap: 10px">
@@ -627,9 +659,9 @@
         if (item.priceStr) return item.priceStr;
         if (item.price !== undefined) {
           const unit = item.unit || "份";
-          return `¥${item.price}${unit !== "份" ? "/" + unit : ""}`;
+          return `${item.price}元${unit !== "份" ? "/" + unit : ""}`;
         }
-        return "¥0";
+        return "0元";
       }
 
       function addToCart(itemName, price, img) {
@@ -669,8 +701,8 @@
           0,
         );
         const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-        document.getElementById("cartTotalBtn").innerHTML = `¥${total}`;
-        document.getElementById("cartTotalPrice").innerHTML = `¥${total}`;
+        document.getElementById("cartTotalBtn").innerHTML = `${total}元`;
+        document.getElementById("cartTotalPrice").innerHTML = `${total}元`;
         document.getElementById("cartItemCount").innerHTML =
           `(${itemCount}道菜)`;
 
@@ -693,14 +725,14 @@
                     </div>
                     <div style="flex:1;">
                         <div style="font-weight:500;">${escapeHtml(item.name)}</div>
-                        <div style="font-size:0.7rem; color:#c23b22;">¥${item.price}</div>
+                        <div style="font-size:0.7rem; color:#c23b22;">${item.price}元</div>
                     </div>
                     <div style="display:flex; align-items:center; gap:8px;">
                         <button class="qty-btn" data-action="remove" data-name="${escapeHtml(item.name)}" style="background:#f0e4d4; border:none; width:28px; height:28px; border-radius:50%; font-size:1rem; cursor:pointer;">-</button>
                         <span style="min-width:24px; text-align:center;">${item.quantity}</span>
                         <button class="qty-btn" data-action="add" data-name="${escapeHtml(item.name)}" data-price="${item.price}" data-img="${item.img}" style="background:#f0e4d4; border:none; width:28px; height:28px; border-radius:50%; font-size:1rem; cursor:pointer;">+</button>
                     </div>
-                    <div style="min-width:65px; text-align:right; font-weight:500; color:#c23b22;">¥${item.price * item.quantity}</div>
+                    <div style="min-width:65px; text-align:right; font-weight:500; color:#c23b22;">${item.price * item.quantity}元</div>
                 </div>
             `,
             )
