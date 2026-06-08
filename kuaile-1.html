@@ -98,7 +98,6 @@
         color: #8b7355;
       }
 
-      /* 购物车底部栏 */
       .cart-bar {
         position: fixed;
         bottom: 0;
@@ -249,7 +248,6 @@
         text-align: center;
       }
 
-      /* 预约按钮 */
       .booking-btn {
         background: #d4953a;
         color: white;
@@ -263,7 +261,6 @@
         cursor: pointer;
       }
 
-      /* 弹窗 */
       .modal {
         position: fixed;
         top: 0;
@@ -385,7 +382,6 @@
         </div>
       </div>
 
-      <!-- 搜索框 -->
       <div class="search-box">
         <input
           type="text"
@@ -398,7 +394,6 @@
       <div id="categoryNav" class="category-nav"></div>
       <div id="menuContainer"></div>
 
-      <!-- 预约订桌按钮 -->
       <button class="booking-btn" id="bookingBtn">📅 预约订桌</button>
 
       <div class="address-card">
@@ -413,19 +408,16 @@
         <p>© 2026 筷乐小院 | 晚餐 · 夜宵 · 把酒言欢</p>
       </div>
 
-      <!-- 购物车底部栏 -->
       <div class="cart-bar" id="cartBar">
         <span>🛒 购物车</span>
         <span class="cart-total" id="cartTotalBtn">¥0</span>
       </div>
 
-      <!-- 购物车弹窗 -->
       <div id="cartModal" class="modal">
         <div class="modal-content">
           <h3>🛒 我的点单</h3>
           <div id="cartItems"></div>
           <div
-            class="total-price"
             style="
               font-size: 1.1rem;
               font-weight: bold;
@@ -440,7 +432,6 @@
         </div>
       </div>
 
-      <!-- 预约弹窗 -->
       <div id="bookingModal" class="modal">
         <div class="modal-content">
           <h3>📝 预约订桌</h3>
@@ -483,17 +474,14 @@
     <a href="kuaile-2.html" class="admin-link">🔧 管理菜单</a>
 
     <script>
-      // 获取桌号（从 URL 参数 ?table=1）
       const urlParams = new URLSearchParams(window.location.search);
       let tableNumber = urlParams.get("table") || "1";
       document.getElementById("tableInfo").innerHTML = `🏠 ${tableNumber}号桌`;
 
-      // 购物车数据
       let cart = JSON.parse(
         localStorage.getItem(`cart_${tableNumber}`) || "[]",
       );
 
-      // 营业状态
       function updateStatus() {
         const now = new Date();
         const currentHour = now.getHours();
@@ -512,7 +500,6 @@
       }
       updateStatus();
 
-      // 菜单数据
       let menuData = null;
       let currentSearchKeyword = "";
 
@@ -534,31 +521,31 @@
               {
                 name: "海蚌炖土鸭",
                 price: 188,
-                priceStr: "¥188",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=10",
               },
               {
                 name: "牛排锅",
                 price: 188,
-                priceStr: "¥188",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=11",
               },
               {
                 name: "肥肠鸡",
                 price: 158,
-                priceStr: "¥158",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=12",
               },
               {
                 name: "红烧鳝段",
                 price: 158,
-                priceStr: "¥158",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=13",
               },
               {
                 name: "黄鳝锅",
                 price: 158,
-                priceStr: "¥158",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=14",
               },
             ],
@@ -566,13 +553,13 @@
               {
                 name: "三鲜汤",
                 price: 98,
-                priceStr: "¥98",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=20",
               },
               {
                 name: "筒骨鱼丸汤",
                 price: 88,
-                priceStr: "¥88",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=21",
               },
             ],
@@ -580,13 +567,13 @@
               {
                 name: "干锅三腊",
                 price: 78,
-                priceStr: "¥78",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=40",
               },
               {
                 name: "干锅肥肠",
                 price: 58,
-                priceStr: "¥58",
+                unit: "份",
                 img: "https://picsum.photos/200/150?random=41",
               },
             ],
@@ -599,6 +586,15 @@
       function getItemQuantity(itemName) {
         const found = cart.find((c) => c.name === itemName);
         return found ? found.quantity : 0;
+      }
+
+      function formatPriceDisplay(item) {
+        if (item.priceStr) return item.priceStr;
+        if (item.price !== undefined) {
+          const unit = item.unit || "份";
+          return `¥${item.price}${unit !== "份" ? "/" + unit : ""}`;
+        }
+        return "¥0";
       }
 
       function addToCart(item) {
@@ -653,7 +649,7 @@
                     <div style="display:flex; align-items:center; gap:10px;">
                         <button class="qty-btn" onclick="removeFromCart('${escapeHtml(item.name)}')">-</button>
                         <span>${item.quantity}</span>
-                        <button class="qty-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, priceStr:'${item.priceStr}', img:'${item.img}'})">+</button>
+                        <button class="qty-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, img:'${item.img}'})">+</button>
                         <span style="width:60px; text-align:right">¥${item.price * item.quantity}</span>
                     </div>
                 </div>
@@ -700,6 +696,7 @@
           gridDiv.className = "menu-grid";
           items.forEach((item) => {
             const qty = getItemQuantity(item.name);
+            const priceDisplay = formatPriceDisplay(item);
             const itemDiv = document.createElement("div");
             itemDiv.className = "menu-item";
             if (hotDishes.includes(item.name)) itemDiv.classList.add("hot");
@@ -707,14 +704,14 @@
                     <img class="menu-img" src="${item.img || "https://picsum.photos/200/150?random=1"}" onerror="this.src='https://picsum.photos/200/150?random=1'">
                     <div class="menu-info">
                         <div class="menu-name">${escapeHtml(item.name)}</div>
-                        <div class="menu-price">${item.priceStr}</div>
+                        <div class="menu-price">${priceDisplay}</div>
                         ${
                           qty === 0
-                            ? `<button class="add-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, priceStr:'${item.priceStr}', img:'${item.img}'})">+ 点菜</button>`
+                            ? `<button class="add-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, priceStr:'${priceDisplay}', img:'${item.img}'})">+ 点菜</button>`
                             : `<div class="quantity-control">
                                 <button class="qty-btn" onclick="removeFromCart('${escapeHtml(item.name)}')">-</button>
                                 <span class="qty-num">${qty}</span>
-                                <button class="qty-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, priceStr:'${item.priceStr}', img:'${item.img}'})">+</button>
+                                <button class="qty-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, priceStr:'${priceDisplay}', img:'${item.img}'})">+</button>
                             </div>`
                         }
                     </div>
@@ -769,13 +766,11 @@
         );
       }
 
-      // 搜索监听
       document.getElementById("searchInput").addEventListener("input", (e) => {
         currentSearchKeyword = e.target.value;
         applyFilter();
       });
 
-      // 购物车弹窗
       const cartModal = document.getElementById("cartModal");
       const cartBar = document.getElementById("cartBar");
       cartBar.onclick = () => {
@@ -788,7 +783,6 @@
         if (e.target === cartModal) cartModal.classList.remove("show");
       };
 
-      // 提交订单
       document.getElementById("submitOrderBtn").onclick = () => {
         if (cart.length === 0) {
           alert("请先点菜");
@@ -808,7 +802,6 @@
           createTime: new Date().toLocaleString(),
         });
         localStorage.setItem("kuaileOrders", JSON.stringify(orders));
-
         alert(`订单已提交！${tableNumber}号桌，请稍等片刻。`);
         cart = [];
         saveCart();
@@ -817,7 +810,6 @@
         updateCartUI();
       };
 
-      // 预约订桌
       const modal = document.getElementById("bookingModal");
       const bookingBtn = document.getElementById("bookingBtn");
       const closeModalBtn = document.getElementById("closeModal");
@@ -871,7 +863,6 @@
         document.getElementById("bookingRemark").value = "";
       };
 
-      // 监听菜单更新
       window.addEventListener("storage", (e) => {
         if (e.key === "kuaileMenu") loadMenu();
       });

@@ -228,8 +228,8 @@
                     <div class="order-total">总计：¥${order.total}</div>
                     <div style="font-size:0.7rem; color:#8b7355;">⏰ ${order.createTime}</div>
                     <div class="order-actions">
-                        ${order.status === "待处理" ? `<button class="action-btn btn-confirm" onclick="updateOrderStatus(${order.id}, '已确认')">✓ 确认</button>` : ""}
-                        ${order.status !== "已完成" ? `<button class="action-btn btn-complete" onclick="updateOrderStatus(${order.id}, '已完成')">✅ 完成</button>` : ""}
+                        ${order.status === "待处理" ? `<button class="action-btn btn-confirm" onclick="updateOrderStatus(${order.id}, '已确认')">✓ 接单确认</button>` : ""}
+                        ${order.status === "已确认" ? `<button class="action-btn btn-complete" onclick="updateOrderStatus(${order.id}, '已完成')">✅ 标记完成</button>` : ""}
                     </div>
                 </div>
             `;
