@@ -19,7 +19,6 @@
         padding: 0;
         box-sizing: border-box;
       }
-
       body {
         font-family:
           -apple-system, "Segoe UI", "PingFang SC", Roboto, "Helvetica Neue",
@@ -28,7 +27,6 @@
         color: #2c2418;
         line-height: 1.5;
       }
-
       .page {
         max-width: 600px;
         margin: 0 auto;
@@ -37,12 +35,10 @@
         min-height: 100vh;
         padding-bottom: 80px;
       }
-
       .top-deco {
         height: 4px;
         background: linear-gradient(90deg, #c23b22, #d4953a, #c23b22);
       }
-
       .header {
         text-align: center;
         padding: 20px 20px 16px;
@@ -53,13 +49,11 @@
         background-position: center;
         color: white;
       }
-
       .store-name {
         font-size: 1.8rem;
         font-weight: 600;
         letter-spacing: 2px;
       }
-
       .table-info {
         background: rgba(0, 0, 0, 0.5);
         display: inline-block;
@@ -68,7 +62,6 @@
         font-size: 0.8rem;
         margin-top: 10px;
       }
-
       .info-card {
         background: white;
         margin: 16px 16px 12px;
@@ -76,7 +69,6 @@
         border-radius: 16px;
         border: 1px solid #f0e4d4;
       }
-
       .status-row {
         display: flex;
         justify-content: space-between;
@@ -84,7 +76,6 @@
         flex-wrap: wrap;
         gap: 8px;
       }
-
       .status-badge {
         background: #c23b22;
         color: #f5e6c8;
@@ -92,12 +83,10 @@
         border-radius: 30px;
         font-size: 0.7rem;
       }
-
       .hours {
         font-size: 0.75rem;
         color: #8b7355;
       }
-
       .cart-bar {
         position: fixed;
         bottom: 0;
@@ -121,7 +110,6 @@
         font-size: 0.9rem;
         font-weight: bold;
       }
-
       .search-box {
         margin: 12px 16px;
       }
@@ -134,7 +122,6 @@
         background: white;
         outline: none;
       }
-
       .category-nav {
         overflow-x: auto;
         white-space: nowrap;
@@ -161,7 +148,6 @@
         background: #c23b22;
         color: white;
       }
-
       .section {
         margin: 16px;
         scroll-margin-top: 70px;
@@ -174,7 +160,6 @@
         border-left: 3px solid #d4953a;
         margin-bottom: 12px;
       }
-
       .menu-grid {
         display: flex;
         flex-direction: column;
@@ -247,7 +232,6 @@
         min-width: 20px;
         text-align: center;
       }
-
       .booking-btn {
         background: #d4953a;
         color: white;
@@ -260,7 +244,6 @@
         margin: 0 16px 16px;
         cursor: pointer;
       }
-
       .modal {
         position: fixed;
         top: 0;
@@ -318,7 +301,6 @@
       .modal-content .close-modal {
         background: #8b7355;
       }
-
       .address-card {
         background: #fff5ea;
         margin: 12px 16px;
@@ -327,7 +309,6 @@
         text-align: center;
         font-size: 0.85rem;
       }
-
       .footer-info {
         background: #2c2418;
         color: #d4c5ae;
@@ -336,29 +317,12 @@
         margin-top: 20px;
         font-size: 0.7rem;
       }
-
       .phone-big {
         font-size: 1.3rem;
         font-weight: bold;
         color: #d4953a;
         margin: 8px 0;
       }
-
-      .admin-link {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #c23b22;
-        color: white;
-        border: none;
-        border-radius: 40px;
-        padding: 6px 14px;
-        font-size: 0.65rem;
-        text-decoration: none;
-        opacity: 0.5;
-        z-index: 100;
-      }
-
       .no-result {
         text-align: center;
         padding: 40px;
@@ -369,19 +333,16 @@
   <body>
     <div class="page">
       <div class="top-deco"></div>
-
       <div class="header">
         <div class="store-name">筷乐小院</div>
         <div class="table-info" id="tableInfo">加载中...</div>
       </div>
-
       <div class="info-card">
         <div class="status-row">
           <span class="status-badge" id="statusBadge">● 营业中</span>
           <span class="hours">🕘 15:00 - 02:00</span>
         </div>
       </div>
-
       <div class="search-box">
         <input
           type="text"
@@ -390,29 +351,23 @@
           placeholder="🔍 搜索菜名..."
         />
       </div>
-
       <div id="categoryNav" class="category-nav"></div>
       <div id="menuContainer"></div>
-
       <button class="booking-btn" id="bookingBtn">📅 预约订桌</button>
-
       <div class="address-card">
         📍 福建省南平市浦城县兴华路295号<br />
         🅿️ 门口可停车 | 包厢请提前预订
       </div>
-
       <div class="footer-info">
         <div class="phone-big">📞 189-6063-4499</div>
         <p>🕘 营业时间：下午15:00 - 凌晨02:00</p>
         <p>🏠 6个包厢（12-15人）| 🌳 3张露天桌（6-8人）</p>
         <p>© 2026 筷乐小院 | 晚餐 · 夜宵 · 把酒言欢</p>
       </div>
-
       <div class="cart-bar" id="cartBar">
         <span>🛒 购物车</span>
         <span class="cart-total" id="cartTotalBtn">¥0</span>
       </div>
-
       <div id="cartModal" class="modal">
         <div class="modal-content">
           <h3>🛒 我的点单</h3>
@@ -431,13 +386,12 @@
           <button class="close-modal" id="closeCartBtn">继续点菜</button>
         </div>
       </div>
-
       <div id="bookingModal" class="modal">
         <div class="modal-content">
           <h3>📝 预约订桌</h3>
           <input type="text" id="bookingName" placeholder="您的姓名" />
           <input type="tel" id="bookingPhone" placeholder="手机号码" />
-          <input type="date" id="bookingDate" />
+          <input type="date" id="bookingDate" min="" />
           <select id="bookingTime">
             <option value="">选择时段</option>
             <option>17:00-18:30</option>
@@ -471,16 +425,27 @@
       </div>
     </div>
 
-    <a href="kuaile-2.html" class="admin-link">🔧 管理菜单</a>
-
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       let tableNumber = urlParams.get("table") || "1";
       document.getElementById("tableInfo").innerHTML = `🏠 ${tableNumber}号桌`;
 
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("bookingDate").setAttribute("min", today);
+
       let cart = JSON.parse(
         localStorage.getItem(`cart_${tableNumber}`) || "[]",
       );
+      let menuData = null;
+      let currentSearchKeyword = "";
+
+      const hotDishes = [
+        "海蚌炖土鸭",
+        "牛排锅",
+        "肥肠鸡",
+        "红烧鳝段",
+        "黄鳝锅",
+      ];
 
       function updateStatus() {
         const now = new Date();
@@ -499,17 +464,7 @@
         }
       }
       updateStatus();
-
-      let menuData = null;
-      let currentSearchKeyword = "";
-
-      const hotDishes = [
-        "海蚌炖土鸭",
-        "牛排锅",
-        "肥肠鸡",
-        "红烧鳝段",
-        "黄鳝锅",
-      ];
+      setInterval(updateStatus, 60000);
 
       function loadMenu() {
         const saved = localStorage.getItem("kuaileMenu");
@@ -535,18 +490,6 @@
                 price: 158,
                 unit: "份",
                 img: "https://picsum.photos/200/150?random=12",
-              },
-              {
-                name: "红烧鳝段",
-                price: 158,
-                unit: "份",
-                img: "https://picsum.photos/200/150?random=13",
-              },
-              {
-                name: "黄鳝锅",
-                price: 158,
-                unit: "份",
-                img: "https://picsum.photos/200/150?random=14",
               },
             ],
             "炖罐·汤品": [
@@ -597,12 +540,12 @@
         return "¥0";
       }
 
-      function addToCart(item) {
-        const existing = cart.find((c) => c.name === item.name);
+      function addToCart(itemName, price, img) {
+        const existing = cart.find((c) => c.name === itemName);
         if (existing) {
           existing.quantity++;
         } else {
-          cart.push({ ...item, quantity: 1 });
+          cart.push({ name: itemName, price: price, quantity: 1, img: img });
         }
         saveCart();
         updateCartUI();
@@ -647,9 +590,9 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f0e4d4;">
                     <div style="flex:1;">${escapeHtml(item.name)}</div>
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <button class="qty-btn" onclick="removeFromCart('${escapeHtml(item.name)}')">-</button>
+                        <button class="qty-btn" data-action="remove" data-name="${escapeHtml(item.name)}">-</button>
                         <span>${item.quantity}</span>
-                        <button class="qty-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, img:'${item.img}'})">+</button>
+                        <button class="qty-btn" data-action="add" data-name="${escapeHtml(item.name)}" data-price="${item.price}" data-img="${item.img}">+</button>
                         <span style="width:60px; text-align:right">¥${item.price * item.quantity}</span>
                     </div>
                 </div>
@@ -707,11 +650,11 @@
                         <div class="menu-price">${priceDisplay}</div>
                         ${
                           qty === 0
-                            ? `<button class="add-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, priceStr:'${priceDisplay}', img:'${item.img}'})">+ 点菜</button>`
+                            ? `<button class="add-btn" data-action="add" data-name="${escapeHtml(item.name)}" data-price="${item.price}" data-img="${item.img}">+ 点菜</button>`
                             : `<div class="quantity-control">
-                                <button class="qty-btn" onclick="removeFromCart('${escapeHtml(item.name)}')">-</button>
+                                <button class="qty-btn" data-action="remove" data-name="${escapeHtml(item.name)}">-</button>
                                 <span class="qty-num">${qty}</span>
-                                <button class="qty-btn" onclick="addToCart({name:'${escapeHtml(item.name)}', price:${item.price}, priceStr:'${priceDisplay}', img:'${item.img}'})">+</button>
+                                <button class="qty-btn" data-action="add" data-name="${escapeHtml(item.name)}" data-price="${item.price}" data-img="${item.img}">+</button>
                             </div>`
                         }
                     </div>
@@ -765,6 +708,36 @@
           m === "&" ? "&amp;" : m === "<" ? "&lt;" : "&gt;",
         );
       }
+
+      document
+        .getElementById("menuContainer")
+        .addEventListener("click", (e) => {
+          const target = e.target;
+          const action = target.getAttribute("data-action");
+          if (action === "add") {
+            const name = target.getAttribute("data-name");
+            const price = parseFloat(target.getAttribute("data-price"));
+            const img = target.getAttribute("data-img");
+            addToCart(name, price, img);
+          } else if (action === "remove") {
+            const name = target.getAttribute("data-name");
+            removeFromCart(name);
+          }
+        });
+
+      document.getElementById("cartItems").addEventListener("click", (e) => {
+        const target = e.target;
+        const action = target.getAttribute("data-action");
+        if (action === "add") {
+          const name = target.getAttribute("data-name");
+          const price = parseFloat(target.getAttribute("data-price"));
+          const img = target.getAttribute("data-img");
+          addToCart(name, price, img);
+        } else if (action === "remove") {
+          const name = target.getAttribute("data-name");
+          removeFromCart(name);
+        }
+      });
 
       document.getElementById("searchInput").addEventListener("input", (e) => {
         currentSearchKeyword = e.target.value;
@@ -866,6 +839,16 @@
       window.addEventListener("storage", (e) => {
         if (e.key === "kuaileMenu") loadMenu();
       });
+
+      setInterval(() => {
+        const saved = localStorage.getItem("kuaileMenu");
+        if (saved && menuData) {
+          const newData = JSON.parse(saved);
+          if (JSON.stringify(newData) !== JSON.stringify(menuData)) {
+            loadMenu();
+          }
+        }
+      }, 30000);
 
       loadMenu();
     </script>

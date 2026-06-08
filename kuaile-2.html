@@ -7,25 +7,23 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
     />
     <title>筷乐小院 - 菜单管理后台</title>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-
       body {
         font-family:
           -apple-system, "Segoe UI", "PingFang SC", Roboto, sans-serif;
         background: #f5efe6;
         padding: 20px;
       }
-
       .container {
         max-width: 900px;
         margin: 0 auto;
       }
-
       .card {
         background: white;
         border-radius: 24px;
@@ -33,16 +31,13 @@
         margin-bottom: 20px;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
       }
-
       .login-card {
         text-align: center;
       }
-
       .login-card h1 {
         color: #c23b22;
         margin-bottom: 20px;
       }
-
       .login-card input {
         width: 100%;
         max-width: 260px;
@@ -53,7 +48,6 @@
         text-align: center;
         margin-bottom: 15px;
       }
-
       .login-card button {
         background: #c23b22;
         color: white;
@@ -63,13 +57,11 @@
         font-size: 1rem;
         cursor: pointer;
       }
-
       .error {
         color: #c23b22;
         margin-top: 12px;
         font-size: 0.85rem;
       }
-
       .nav-bar {
         display: flex;
         justify-content: space-between;
@@ -78,7 +70,6 @@
         flex-wrap: wrap;
         gap: 12px;
       }
-
       .nav-bar a {
         color: #c23b22;
         text-decoration: none;
@@ -87,7 +78,6 @@
         border-radius: 40px;
         font-size: 0.9rem;
       }
-
       .nav-bar button {
         background: #8b7355;
         color: white;
@@ -96,90 +86,151 @@
         border-radius: 40px;
         cursor: pointer;
       }
-
       h1 {
         color: #c23b22;
         margin-bottom: 20px;
       }
-
-      .category {
-        margin-bottom: 30px;
-        border-top: 2px solid #f0e4d4;
-        padding-top: 20px;
+      .sort-hint {
+        font-size: 0.7rem;
+        color: #8b7355;
+        margin-left: 10px;
+      }
+      .warning-msg {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        color: #856404;
       }
 
-      .category h2 {
-        color: #c23b22;
-        margin-bottom: 15px;
-        font-size: 1.3rem;
+      /* 分类拖拽容器 */
+      .categories-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .category-item {
+        background: white;
+        border: 1px solid #f0e4d4;
+        border-radius: 20px;
+        padding: 16px;
+        cursor: grab;
+      }
+      .category-item:active {
+        cursor: grabbing;
+      }
+      .category-header {
         display: flex;
         align-items: center;
-        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0e4d4;
+      }
+      .category-title {
+        display: flex;
+        align-items: center;
         gap: 10px;
       }
-
-      .menu-row {
+      .drag-cat-handle {
+        cursor: grab;
+        background: #f0e4d4;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        color: #8b7355;
+      }
+      .drag-cat-handle:active {
+        cursor: grabbing;
+      }
+      .category-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #c23b22;
+      }
+      .delete-cat-btn {
+        background: #c23b22;
+        color: white;
+        border: none;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        cursor: pointer;
+      }
+      /* 菜品拖拽列表 */
+      .sortable-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .sortable-item {
         display: flex;
         gap: 8px;
         margin-bottom: 10px;
         align-items: center;
         flex-wrap: wrap;
-      }
-
-      .menu-row input {
-        flex: 2;
-        padding: 10px 12px;
-        border: 1px solid #e0d0c0;
+        background: #fef9f0;
+        padding: 8px;
         border-radius: 12px;
-        font-size: 0.9rem;
+        border: 1px solid #f0e4d4;
       }
-
-      .menu-row input.price {
-        flex: 1;
-        min-width: 80px;
+      .drag-handle {
+        cursor: grab;
+        background: #e8dccc;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #8b7355;
+        user-select: none;
       }
-
-      .menu-row input.unit {
-        flex: 0.8;
-        min-width: 60px;
+      .drag-handle:active {
+        cursor: grabbing;
       }
-
-      .menu-row input.img-url {
+      .sortable-item input {
         flex: 2;
-        font-size: 0.8rem;
+        padding: 8px 10px;
+        border: 1px solid #e0d0c0;
+        border-radius: 10px;
+        font-size: 0.85rem;
       }
-
-      .menu-row button {
-        background: #d4953a;
+      .sortable-item input.price {
+        flex: 1;
+        min-width: 70px;
+      }
+      .sortable-item input.unit {
+        flex: 0.6;
+        min-width: 50px;
+      }
+      .sortable-item input.img-url {
+        flex: 2;
+        font-size: 0.75rem;
+      }
+      .sortable-item button {
+        background: #c23b22;
         color: white;
         border: none;
-        padding: 8px 14px;
-        border-radius: 10px;
+        padding: 6px 12px;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
       }
-
-      .menu-row button.delete {
-        background: #c23b22;
-      }
-
       .add-category-btn,
       .add-item-btn {
         background: #27ae60;
         color: white;
         border: none;
-        padding: 10px 20px;
+        padding: 8px 16px;
         border-radius: 30px;
         margin-top: 12px;
         cursor: pointer;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
       }
-
       .add-category-btn {
         background: #d4953a;
         margin-bottom: 20px;
       }
-
       .save-all {
         background: #c23b22;
         color: white;
@@ -191,46 +242,27 @@
         width: 100%;
         margin-top: 20px;
       }
-
       .success-msg {
         color: #27ae60;
         margin-top: 12px;
         text-align: center;
         display: none;
       }
-
       .new-category-input {
         display: flex;
         gap: 10px;
         margin-top: 10px;
       }
-
       .new-category-input input {
         flex: 1;
         padding: 10px;
         border: 1px solid #e0d0c0;
         border-radius: 12px;
       }
-
-      .warning-msg {
-        background: #fff3cd;
-        border-left: 4px solid #ffc107;
-        padding: 12px 16px;
-        margin-bottom: 20px;
-        border-radius: 12px;
-        font-size: 0.85rem;
-        color: #856404;
-      }
-
-      hr {
-        margin: 20px 0;
-        border: none;
-        border-top: 1px solid #f0e4d4;
-      }
     </style>
   </head>
   <body>
-    <div class="container" id="app">
+    <div class="container">
       <div id="loginPanel" class="card login-card">
         <h1>🔐 筷乐小院 · 后台管理</h1>
         <input type="password" id="password" placeholder="请输入管理密码" />
@@ -251,13 +283,15 @@
           <button onclick="logout()">🚪 退出登录</button>
         </div>
         <div class="card">
-          <h1>📝 菜单管理</h1>
+          <h1>
+            📝 菜单管理
+            <span class="sort-hint">💡 拖拽左侧 ⋮⋮ 可调整分类或菜品顺序</span>
+          </h1>
           <div class="warning-msg">
-            💡 提示：价格请输入纯数字（如 188），系统会自动显示为 ¥188。<br />
-            💡 单位：份（默认）/ 个 / 只 / 斤，会影响前台显示。
+            💡 提示：价格请输入纯数字（如
+            188），系统会自动显示。单位：份/个/只/斤。
           </div>
           <div id="menuEditor"></div>
-
           <button class="add-category-btn" onclick="showAddCategory()">
             + 添加新分类
           </button>
@@ -274,7 +308,6 @@
             <button onclick="addCategory()">确认添加</button>
             <button onclick="hideAddCategory()">取消</button>
           </div>
-
           <button class="save-all" onclick="saveAll()">💾 保存所有修改</button>
           <div id="saveMsg" class="success-msg">
             ✅ 保存成功！前台会自动更新
@@ -286,56 +319,95 @@
     <script>
       const ADMIN_PASSWORD = "kuaile123";
       let menuData = null;
+      let categorySortable = null;
+      let itemSortables = [];
 
-      // 默认菜单数据（数字价格 + 单位）
+      if (sessionStorage.getItem("adminLoggedIn") === "true") {
+        document.getElementById("loginPanel").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        loadData();
+        renderEditor();
+      }
+
+      // 完整菜单数据（按图片录入）
       const defaultMenu = {
-        招牌必点: [
-          {
-            name: "海蚌炖土鸭",
-            price: 188,
-            unit: "份",
-            img: "https://picsum.photos/200/150?random=10",
-          },
-          {
-            name: "牛排锅",
-            price: 188,
-            unit: "份",
-            img: "https://picsum.photos/200/150?random=11",
-          },
-          {
-            name: "肥肠鸡",
-            price: 158,
-            unit: "份",
-            img: "https://picsum.photos/200/150?random=12",
-          },
+        "🍲 招牌必点": [
+          { name: "海蚌炖土鸭", price: 188, unit: "份", img: "" },
+          { name: "牛排锅", price: 188, unit: "份", img: "" },
+          { name: "黄鳝锅", price: 158, unit: "份", img: "" },
+          { name: "红烧鳝段", price: 158, unit: "份", img: "" },
+          { name: "肥肠鸡", price: 158, unit: "份", img: "" },
+          { name: "甲鱼锅", price: 108, unit: "份", img: "" },
+          { name: "牛腩锅", price: 98, unit: "份", img: "" },
+          { name: "牛肉锅", price: 98, unit: "份", img: "" },
+          { name: "鱼头豆腐锅", price: 78, unit: "份", img: "" },
+          { name: "泥鳅芋子锅", price: 78, unit: "份", img: "" },
+          { name: "金汤酸菜汤", price: 88, unit: "份", img: "" },
         ],
-        "炖罐·汤品": [
-          {
-            name: "三鲜汤",
-            price: 98,
-            unit: "份",
-            img: "https://picsum.photos/200/150?random=20",
-          },
-          {
-            name: "筒骨鱼丸汤",
-            price: 88,
-            unit: "份",
-            img: "https://picsum.photos/200/150?random=21",
-          },
+        "🥣 炖罐·汤品": [
+          { name: "三鲜汤", price: 98, unit: "份", img: "" },
+          { name: "筒骨鱼丸汤", price: 88, unit: "份", img: "" },
+          { name: "筒骨玉米汤", price: 88, unit: "份", img: "" },
+          { name: "筒骨目鱼香菇汤", price: 88, unit: "份", img: "" },
+          { name: "排骨玉米汤", price: 78, unit: "份", img: "" },
+          { name: "黄骨鱼豆腐汤", price: 68, unit: "份", img: "" },
+          { name: "荷包蛋煎黄骨鱼", price: 68, unit: "份", img: "" },
+          { name: "猪皮蛋菇酸辣汤", price: 22, unit: "份", img: "" },
+          { name: "农家土鸡汤", price: 0, unit: "时价", img: "" },
         ],
-        "干锅·硬菜": [
-          {
-            name: "干锅三腊",
-            price: 78,
-            unit: "份",
-            img: "https://picsum.photos/200/150?random=40",
-          },
-          {
-            name: "干锅肥肠",
-            price: 58,
-            unit: "份",
-            img: "https://picsum.photos/200/150?random=41",
-          },
+        "🍳 干锅·硬菜": [
+          { name: "干锅三腊", price: 78, unit: "份", img: "" },
+          { name: "干锅肥肠", price: 58, unit: "份", img: "" },
+          { name: "干锅田鸡", price: 48, unit: "份", img: "" },
+          { name: "干锅鹿茸菇", price: 38, unit: "份", img: "" },
+          { name: "干锅土豆片", price: 28, unit: "份", img: "" },
+          { name: "水煮牛肉", price: 68, unit: "份", img: "" },
+          { name: "泡椒田鸡", price: 58, unit: "份", img: "" },
+        ],
+        "🥢 小炒·风味": [
+          { name: "农家小炒肉", price: 28, unit: "份", img: "" },
+          { name: "爆炒牛肉", price: 58, unit: "份", img: "" },
+          { name: "红烧肉", price: 38, unit: "份", img: "" },
+          { name: "糖醋排骨", price: 48, unit: "份", img: "" },
+          { name: "椒盐排骨", price: 48, unit: "份", img: "" },
+          { name: "红烧猪蹄", price: 88, unit: "份", img: "" },
+          { name: "清汤猪蹄", price: 88, unit: "份", img: "" },
+          { name: "爆炒鳝片", price: 58, unit: "份", img: "" },
+          { name: "酸辣鸡爪", price: 68, unit: "份", img: "" },
+          { name: "卤水拼盘", price: 68, unit: "份", img: "" },
+          { name: "五香卷双拼", price: 58, unit: "份", img: "" },
+          { name: "秘制酱鸭", price: 58, unit: "份", img: "" },
+          { name: "煎河鱼", price: 58, unit: "份", img: "" },
+          { name: "溜鱼片", price: 38, unit: "份", img: "" },
+          { name: "红烧黄瓜鱼", price: 58, unit: "份", img: "" },
+          { name: "干煎黄瓜鱼", price: 58, unit: "份", img: "" },
+          { name: "红烧带鱼", price: 38, unit: "份", img: "" },
+          { name: "煎带鱼", price: 38, unit: "份", img: "" },
+          { name: "椒盐小河虾", price: 58, unit: "份", img: "" },
+          { name: "椒盐明虾", price: 78, unit: "份", img: "" },
+          { name: "椒盐鱿鱼须", price: 38, unit: "份", img: "" },
+          { name: "大肠芋子", price: 58, unit: "份", img: "" },
+          { name: "芋母丝大肠", price: 48, unit: "份", img: "" },
+          { name: "鱼干芋母丝", price: 38, unit: "份", img: "" },
+          { name: "五花肉炒豆干", price: 28, unit: "份", img: "" },
+          { name: "豆干酸菜", price: 22, unit: "份", img: "" },
+          { name: "泥鳅干炒酸菜", price: 38, unit: "份", img: "" },
+          { name: "酸辣猪皮", price: 38, unit: "份", img: "" },
+          { name: "酸辣淮山", price: 26, unit: "份", img: "" },
+          { name: "淮山木耳荷兰豆", price: 26, unit: "份", img: "" },
+        ],
+        "🌙 夜宵·下酒": [
+          { name: "小田螺", price: 20, unit: "份", img: "" },
+          { name: "大田螺煲", price: 38, unit: "份", img: "" },
+          { name: "椒盐鸭头", price: 12, unit: "个", img: "" },
+          { name: "酸辣鸭头", price: 12, unit: "个", img: "" },
+          { name: "五香酱牛肉", price: 88, unit: "份", img: "" },
+          { name: "羊肉烧排骨", price: 78, unit: "份", img: "" },
+        ],
+        "🍚 主食·小吃": [
+          { name: "炒面", price: 0, unit: "时价", img: "" },
+          { name: "手工水饺", price: 0, unit: "时价", img: "" },
+          { name: "手工麻糍", price: 0, unit: "时价", img: "" },
         ],
       };
 
@@ -348,41 +420,60 @@
         }
       }
 
-      function formatPrice(price, unit) {
-        return `¥${price}${unit && unit !== "份" ? "/" + unit : ""}`;
+      function destroySortableInstances() {
+        if (categorySortable) categorySortable.destroy();
+        itemSortables.forEach((s) => {
+          if (s && s.destroy) s.destroy();
+        });
+        itemSortables = [];
       }
 
       function renderEditor() {
         const container = document.getElementById("menuEditor");
         container.innerHTML = "";
 
+        const categoriesContainer = document.createElement("div");
+        categoriesContainer.className = "categories-container";
+        categoriesContainer.id = "categoriesContainer";
+
         for (const [category, items] of Object.entries(menuData)) {
           const categoryDiv = document.createElement("div");
-          categoryDiv.className = "category";
+          categoryDiv.className = "category-item";
+          categoryDiv.setAttribute("data-category", category);
 
-          // 使用 data-cat 存储分类名，避免特殊字符问题
-          const catDisplay = category;
           categoryDiv.innerHTML = `
-                <h2>
-                    ${escapeHtml(catDisplay)}
-                    <button class="delete-cat-btn" style="background:#c23b22; padding:4px 12px; font-size:0.7rem; border:none; border-radius:20px; color:white; cursor:pointer;">删除分类</button>
-                </h2>
+                <div class="category-header">
+                    <div class="category-title">
+                        <div class="drag-cat-handle">⋮⋮</div>
+                        <span class="category-name">${escapeHtml(category)}</span>
+                    </div>
+                    <button class="delete-cat-btn" data-category="${escapeHtml(category)}">删除分类</button>
+                </div>
             `;
 
+          // 菜品列表容器
+          const listContainer = document.createElement("ul");
+          listContainer.className = "sortable-list";
+          listContainer.setAttribute("data-category", category);
+
           items.forEach((item, idx) => {
-            const row = document.createElement("div");
-            row.className = "menu-row";
-            row.setAttribute("data-cat", category);
-            row.setAttribute("data-idx", idx);
-            row.innerHTML = `
+            const listItem = document.createElement("li");
+            listItem.className = "sortable-item";
+            listItem.setAttribute("data-idx", idx);
+            const priceDisplay = item.price || 0;
+            const unitDisplay = item.unit || "份";
+            listItem.innerHTML = `
+                    <div class="drag-handle">⋮⋮</div>
                     <input type="text" class="name-input" value="${escapeHtml(item.name)}" placeholder="菜名" style="flex:2">
-                    <input type="number" class="price-input" value="${item.price}" placeholder="价格" class="price" style="flex:1; min-width:80px">
-                    <input type="text" class="unit-input" value="${item.unit || "份"}" placeholder="单位" class="unit" style="flex:0.8; min-width:60px">
+                    <input type="number" class="price-input" value="${priceDisplay}" placeholder="价格" class="price" style="flex:1; min-width:70px">
+                    <input type="text" class="unit-input" value="${unitDisplay}" placeholder="单位" class="unit" style="flex:0.6; min-width:50px">
                     <input type="text" class="img-input" value="${escapeHtml(item.img || "")}" placeholder="图片URL" class="img-url" style="flex:2">
-                    <button class="delete-item-btn" style="background:#c23b22;">删除</button>
+                    <button class="delete-item-btn">删除</button>
                 `;
-            categoryDiv.appendChild(row);
+            listContainer.appendChild(listItem);
           });
+
+          categoryDiv.appendChild(listContainer);
 
           const addBtn = document.createElement("button");
           addBtn.className = "add-item-btn";
@@ -390,21 +481,81 @@
           addBtn.onclick = () => addItem(category);
           categoryDiv.appendChild(addBtn);
 
-          container.appendChild(categoryDiv);
+          categoriesContainer.appendChild(categoryDiv);
         }
 
+        container.appendChild(categoriesContainer);
+
+        // 初始化分类拖拽
+        const catContainer = document.getElementById("categoriesContainer");
+        if (catContainer) {
+          categorySortable = new Sortable(catContainer, {
+            handle: ".drag-cat-handle",
+            animation: 300,
+            onEnd: () => {
+              // 重新排序 menuData
+              const newMenuData = {};
+              catContainer
+                .querySelectorAll(".category-item")
+                .forEach((catDiv) => {
+                  const catName = catDiv.getAttribute("data-category");
+                  if (menuData[catName]) {
+                    newMenuData[catName] = menuData[catName];
+                  }
+                });
+              // 清空并重新赋值
+              Object.keys(menuData).forEach((k) => delete menuData[k]);
+              Object.assign(menuData, newMenuData);
+              saveToLocal();
+            },
+          });
+        }
+
+        // 初始化每个分类内的菜品拖拽
+        document.querySelectorAll(".sortable-list").forEach((list) => {
+          const category = list.getAttribute("data-category");
+          const sortable = new Sortable(list, {
+            handle: ".drag-handle",
+            animation: 300,
+            onEnd: function () {
+              const newOrder = [];
+              list.querySelectorAll(".sortable-item").forEach((item) => {
+                const nameInput = item.querySelector(".name-input");
+                const priceInput = item.querySelector(".price-input");
+                const unitInput = item.querySelector(".unit-input");
+                const imgInput = item.querySelector(".img-input");
+                newOrder.push({
+                  name: nameInput.value,
+                  price: parseFloat(priceInput.value) || 0,
+                  unit: unitInput.value || "份",
+                  img: imgInput.value,
+                });
+              });
+              menuData[category] = newOrder;
+              saveToLocal();
+            },
+          });
+          itemSortables.push(sortable);
+        });
+
         // 绑定删除分类事件
-        document.querySelectorAll(".delete-cat-btn").forEach((btn, idx) => {
-          const catName = Object.keys(menuData)[idx];
-          btn.onclick = () => deleteCategory(catName);
+        document.querySelectorAll(".delete-cat-btn").forEach((btn) => {
+          btn.onclick = () => {
+            const catName = btn.getAttribute("data-category");
+            if (confirm(`确定删除整个分类「${catName}」吗？`)) {
+              delete menuData[catName];
+              renderEditor();
+            }
+          };
         });
 
         // 绑定删除菜品事件
         document.querySelectorAll(".delete-item-btn").forEach((btn) => {
           btn.onclick = (e) => {
-            const row = btn.closest(".menu-row");
-            const category = row.getAttribute("data-cat");
-            const idx = parseInt(row.getAttribute("data-idx"));
+            const listItem = btn.closest(".sortable-item");
+            const listContainer = listItem.parentElement;
+            const category = listContainer.getAttribute("data-category");
+            const idx = Array.from(listContainer.children).indexOf(listItem);
             if (confirm("确定删除这道菜吗？")) {
               menuData[category].splice(idx, 1);
               renderEditor();
@@ -413,25 +564,21 @@
         });
       }
 
-      function escapeHtml(str) {
-        if (!str) return "";
-        return str.replace(/[&<>]/g, function (m) {
-          if (m === "&") return "&amp;";
-          if (m === "<") return "&lt;";
-          if (m === ">") return "&gt;";
-          return m;
-        });
+      function saveToLocal() {
+        localStorage.setItem("kuaileMenu", JSON.stringify(menuData));
+        window.dispatchEvent(
+          new StorageEvent("storage", {
+            key: "kuaileMenu",
+            newValue: JSON.stringify(menuData),
+          }),
+        );
       }
 
-      function deleteCategory(category) {
-        if (
-          confirm(
-            `确定删除整个分类「${category}」吗？里面的所有菜品也会被删除。`,
-          )
-        ) {
-          delete menuData[category];
-          renderEditor();
-        }
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, (m) =>
+          m === "&" ? "&amp;" : m === "<" ? "&lt;" : "&gt;",
+        );
       }
 
       function addItem(category) {
@@ -439,7 +586,7 @@
           name: "新菜品",
           price: 0,
           unit: "份",
-          img: "https://picsum.photos/200/150?random=new",
+          img: "",
         });
         renderEditor();
       }
@@ -470,44 +617,39 @@
 
       function saveAll() {
         // 收集所有输入框的值
-        const rows = document.querySelectorAll(".menu-row");
-
-        rows.forEach((row) => {
-          const category = row.getAttribute("data-cat");
-          const idx = parseInt(row.getAttribute("data-idx"));
-          const nameInput = row.querySelector(".name-input");
-          const priceInput = row.querySelector(".price-input");
-          const unitInput = row.querySelector(".unit-input");
-          const imgInput = row.querySelector(".img-input");
-
-          if (menuData[category] && menuData[category][idx]) {
-            menuData[category][idx].name = nameInput.value;
-            menuData[category][idx].price = parseFloat(priceInput.value) || 0;
-            menuData[category][idx].unit = unitInput.value || "份";
-            menuData[category][idx].img = imgInput.value;
+        document.querySelectorAll(".sortable-list").forEach((list) => {
+          const category = list.getAttribute("data-category");
+          const newOrder = [];
+          list.querySelectorAll(".sortable-item").forEach((item) => {
+            const nameInput = item.querySelector(".name-input");
+            const priceInput = item.querySelector(".price-input");
+            const unitInput = item.querySelector(".unit-input");
+            const imgInput = item.querySelector(".img-input");
+            newOrder.push({
+              name: nameInput.value,
+              price: parseFloat(priceInput.value) || 0,
+              unit: unitInput.value || "份",
+              img: imgInput.value,
+            });
+          });
+          if (menuData[category]) {
+            menuData[category] = newOrder;
           }
         });
 
-        localStorage.setItem("kuaileMenu", JSON.stringify(menuData));
+        saveToLocal();
 
         const msg = document.getElementById("saveMsg");
         msg.style.display = "block";
         setTimeout(() => {
           msg.style.display = "none";
         }, 2000);
-
-        // 触发前台更新
-        window.dispatchEvent(
-          new StorageEvent("storage", {
-            key: "kuaileMenu",
-            newValue: JSON.stringify(menuData),
-          }),
-        );
       }
 
       function login() {
         const pwd = document.getElementById("password").value;
         if (pwd === ADMIN_PASSWORD) {
+          sessionStorage.setItem("adminLoggedIn", "true");
           loadData();
           renderEditor();
           document.getElementById("loginPanel").style.display = "none";
@@ -518,6 +660,7 @@
       }
 
       function logout() {
+        sessionStorage.removeItem("adminLoggedIn");
         document.getElementById("loginPanel").style.display = "block";
         document.getElementById("adminPanel").style.display = "none";
         document.getElementById("password").value = "";

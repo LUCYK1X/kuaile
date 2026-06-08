@@ -184,6 +184,12 @@
       const PASSWORD = "kuaile123";
       let orders = [];
 
+      if (sessionStorage.getItem("adminLoggedIn") === "true") {
+        document.getElementById("loginPanel").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        loadOrders();
+      }
+
       function loadOrders() {
         const saved = localStorage.getItem("kuaileOrders");
         orders = saved ? JSON.parse(saved) : [];
@@ -215,7 +221,6 @@
             else if (order.status === "已确认")
               statusClass = "status-confirmed";
             else statusClass = "status-completed";
-
             return `
                 <div class="order-item">
                     <div class="order-header">
@@ -256,6 +261,7 @@
       function login() {
         const pwd = document.getElementById("password").value;
         if (pwd === PASSWORD) {
+          sessionStorage.setItem("adminLoggedIn", "true");
           loadOrders();
           document.getElementById("loginPanel").style.display = "none";
           document.getElementById("adminPanel").style.display = "block";
@@ -265,6 +271,7 @@
       }
 
       function logout() {
+        sessionStorage.removeItem("adminLoggedIn");
         document.getElementById("loginPanel").style.display = "block";
         document.getElementById("adminPanel").style.display = "none";
         document.getElementById("password").value = "";
