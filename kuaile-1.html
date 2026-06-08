@@ -19,6 +19,9 @@
         padding: 0;
         box-sizing: border-box;
       }
+      html {
+        scroll-behavior: smooth;
+      }
       body {
         font-family:
           -apple-system, "Segoe UI", "PingFang SC", Roboto, "Helvetica Neue",
@@ -131,6 +134,7 @@
         position: sticky;
         top: 0;
         z-index: 10;
+        -webkit-overflow-scrolling: touch;
       }
       .category-nav::-webkit-scrollbar {
         display: none;
@@ -143,6 +147,7 @@
         border-radius: 30px;
         font-size: 0.8rem;
         cursor: pointer;
+        transition: all 0.2s;
       }
       .category-item.active {
         background: #c23b22;
@@ -328,6 +333,87 @@
         padding: 40px;
         color: #8b7355;
       }
+
+      /* 回到顶部按钮 */
+      .back-to-top {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        background: #c23b22;
+        color: white;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 99;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+        cursor: pointer;
+        border: none;
+      }
+      .back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .back-to-top:hover {
+        background: #a0351e;
+        transform: scale(1.05);
+      }
+
+      /* 自适应布局 */
+      @media (max-width: 480px) {
+        .store-name {
+          font-size: 1.5rem;
+        }
+        .menu-name {
+          font-size: 0.85rem;
+        }
+        .menu-price {
+          font-size: 0.8rem;
+        }
+        .menu-img {
+          width: 60px;
+          height: 60px;
+        }
+        .section-title {
+          font-size: 1rem;
+        }
+        .category-item {
+          padding: 4px 12px;
+          font-size: 0.75rem;
+        }
+        .cart-bar {
+          padding: 10px 16px;
+        }
+        .cart-total {
+          padding: 4px 10px;
+          font-size: 0.8rem;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .menu-item {
+          flex-wrap: wrap;
+        }
+        .menu-img {
+          width: 100%;
+          height: 120px;
+          object-fit: cover;
+        }
+        .menu-info {
+          width: 100%;
+        }
+        .add-btn,
+        .quantity-control {
+          margin-top: 8px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -425,6 +511,9 @@
       </div>
     </div>
 
+    <!-- 回到顶部按钮 -->
+    <button class="back-to-top" id="backToTopBtn" title="回到顶部">↑</button>
+
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       let tableNumber = urlParams.get("table") || "1";
@@ -445,6 +534,9 @@
         "肥肠鸡",
         "红烧鳝段",
         "黄鳝锅",
+        "牛排锅",
+        "甲鱼锅",
+        "牛腩锅",
       ];
 
       function updateStatus() {
@@ -670,14 +762,24 @@
       function renderCategoryNav(menuData) {
         const nav = document.getElementById("categoryNav");
         nav.innerHTML = "";
-        Object.keys(menuData).forEach((cat) => {
+        const categories = Object.keys(menuData);
+        categories.forEach((cat) => {
           const span = document.createElement("span");
           span.className = "category-item";
           span.textContent = cat;
+          span.setAttribute("data-category", cat);
           span.onclick = () => {
             const target = document.getElementById(`cat-${cat}`);
-            if (target)
-              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            if (target) {
+              const offset = 70;
+              const elementPosition = target.getBoundingClientRect().top;
+              const offsetPosition =
+                elementPosition + window.pageYOffset - offset;
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth",
+              });
+            }
           };
           nav.appendChild(span);
         });
@@ -686,19 +788,25 @@
       function observeCategories() {
         const sections = document.querySelectorAll(".section");
         const navItems = document.querySelectorAll(".category-item");
+
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 const catName = entry.target.id.replace("cat-", "");
                 navItems.forEach((item) => {
-                  item.classList.toggle("active", item.textContent === catName);
+                  if (item.getAttribute("data-category") === catName) {
+                    item.classList.add("active");
+                  } else {
+                    item.classList.remove("active");
+                  }
                 });
               }
             });
           },
-          { threshold: 0.3, rootMargin: "-60px 0px 0px 0px" },
+          { threshold: 0.3, rootMargin: "-70px 0px 0px 0px" },
         );
+
         sections.forEach((section) => observer.observe(section));
       }
 
@@ -709,6 +817,7 @@
         );
       }
 
+      // 事件委托
       document
         .getElementById("menuContainer")
         .addEventListener("click", (e) => {
@@ -744,6 +853,7 @@
         applyFilter();
       });
 
+      // 购物车弹窗
       const cartModal = document.getElementById("cartModal");
       const cartBar = document.getElementById("cartBar");
       cartBar.onclick = () => {
@@ -756,6 +866,7 @@
         if (e.target === cartModal) cartModal.classList.remove("show");
       };
 
+      // 提交订单
       document.getElementById("submitOrderBtn").onclick = () => {
         if (cart.length === 0) {
           alert("请先点菜");
@@ -783,6 +894,7 @@
         updateCartUI();
       };
 
+      // 预约订桌
       const modal = document.getElementById("bookingModal");
       const bookingBtn = document.getElementById("bookingBtn");
       const closeModalBtn = document.getElementById("closeModal");
@@ -836,6 +948,20 @@
         document.getElementById("bookingRemark").value = "";
       };
 
+      // 回到顶部功能
+      const backToTopBtn = document.getElementById("backToTopBtn");
+      window.addEventListener("scroll", () => {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.classList.add("show");
+        } else {
+          backToTopBtn.classList.remove("show");
+        }
+      });
+      backToTopBtn.onclick = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      // 监听菜单更新
       window.addEventListener("storage", (e) => {
         if (e.key === "kuaileMenu") loadMenu();
       });
