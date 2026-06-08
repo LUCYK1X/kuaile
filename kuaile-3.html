@@ -2,362 +2,52 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
-    />
-    <title>筷乐小院 · 预约管理后台</title>
+    <title>预约管理 · 全端同步</title>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
       body {
-        font-family:
-          -apple-system, "Segoe UI", "PingFang SC", Roboto, sans-serif;
+        font-family: system-ui;
         background: #f5efe6;
         padding: 20px;
-      }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
       }
       .card {
         background: white;
         border-radius: 24px;
-        padding: 28px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
       }
-      .login-card {
-        text-align: center;
-      }
-      .login-card h1 {
-        color: #c23b22;
-        margin-bottom: 20px;
-      }
-      .login-card input {
-        width: 100%;
-        max-width: 260px;
-        padding: 14px;
-        border: 1px solid #e0d0c0;
-        border-radius: 40px;
-        font-size: 1rem;
-        text-align: center;
-        margin-bottom: 15px;
-      }
-      .login-card button {
-        background: #c23b22;
-        color: white;
-        border: none;
-        padding: 12px 28px;
-        border-radius: 40px;
-        font-size: 1rem;
-        cursor: pointer;
-      }
-      .error {
-        color: #c23b22;
+      button {
         margin-top: 12px;
-        font-size: 0.85rem;
-      }
-      .nav-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .nav-bar a {
-        color: #c23b22;
-        text-decoration: none;
         padding: 8px 16px;
-        background: white;
-        border-radius: 40px;
-        font-size: 0.9rem;
-      }
-      .nav-bar button {
-        background: #8b7355;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 40px;
-        cursor: pointer;
-      }
-      h1 {
-        color: #c23b22;
-        margin-bottom: 20px;
-      }
-      .stats {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-      }
-      .stat-card {
-        background: #fff5ea;
-        border-radius: 20px;
-        padding: 15px 20px;
-        flex: 1;
-        text-align: center;
-      }
-      .stat-number {
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: #c23b22;
-      }
-      .stat-label {
-        font-size: 0.8rem;
-        color: #8b7355;
-        margin-top: 5px;
-      }
-      .booking-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .booking-item {
-        background: white;
-        border-radius: 20px;
-        border: 1px solid #f0e4d4;
-        overflow: hidden;
-      }
-      .booking-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 14px 16px;
-        background: #fffaf2;
-        border-bottom: 1px solid #f0e4d4;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .booking-name {
-        font-weight: bold;
-        font-size: 1rem;
-        color: #c23b22;
-      }
-      .booking-status {
-        background: #d4953a;
-        color: white;
-        padding: 4px 12px;
-        border-radius: 30px;
-        font-size: 0.7rem;
-      }
-      .booking-status.confirmed {
-        background: #27ae60;
-      }
-      .booking-status.cancelled {
-        background: #8b7355;
-      }
-      .booking-body {
-        padding: 14px 16px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .booking-info {
-        flex: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .info-tag {
-        background: #f5efe6;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        color: #5a4a3a;
-      }
-      .booking-actions {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-      }
-      .action-btn {
-        background: none;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        cursor: pointer;
-      }
-      .action-btn.confirm {
-        background: #27ae60;
-        color: white;
-      }
-      .action-btn.delete {
-        background: #c23b22;
-        color: white;
-      }
-      .empty-msg {
-        text-align: center;
-        padding: 40px;
-        color: #8b7355;
-      }
-      .footer {
-        text-align: center;
-        margin-top: 20px;
-        color: #8b7355;
-        font-size: 0.7rem;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div id="loginPanel" class="card login-card">
-        <h1>🔐 预约管理后台</h1>
-        <input type="password" id="password" placeholder="请输入管理密码" />
-        <button onclick="login()">进入管理</button>
-        <div id="loginError" class="error"></div>
-        <div style="margin-top: 16px; font-size: 0.7rem; color: #8b7355">
-          <a href="kuaile-1.html" target="_blank" style="color: #c23b22"
-            >🏠 返回前台</a
-          >
-        </div>
-      </div>
-
-      <div id="adminPanel" style="display: none">
-        <div class="nav-bar">
-          <a href="kuaile-1.html" target="_blank">🏠 查看前台</a>
-          <a href="kuaile-2.html" target="_blank">📝 菜单管理</a>
-          <a href="kuaile-4.html" target="_blank">📋 订单管理</a>
-          <button onclick="logout()">🚪 退出登录</button>
-        </div>
-        <div class="card">
-          <h1>📅 预约管理</h1>
-          <div class="stats" id="stats"></div>
-          <div id="bookingList" class="booking-list"></div>
-        </div>
-        <div class="footer">
-          <p>预约数据保存在浏览器中，建议定期截图备份</p>
-        </div>
-      </div>
+    <div class="card">
+      <h2>📅 预约记录</h2>
+      <div id="bookingList"></div>
     </div>
-
     <script>
-      const ADMIN_PASSWORD = "kuaile123";
-      let bookings = [];
+      const API_KEY =
+        "$2a$10$PgGXF5wf9QCNRaOS7givO.s7OuhI413ZCbbZ5.Wsn1zcImORonYJO";
+      const BIN_ID = "6a26a6ebf5f4af5e29cad51d";
 
-      if (sessionStorage.getItem("adminLoggedIn") === "true") {
-        document.getElementById("loginPanel").style.display = "none";
-        document.getElementById("adminPanel").style.display = "block";
-        loadBookings();
-      }
-
-      function loadBookings() {
-        const saved = localStorage.getItem("kuaileBookings");
-        if (saved) {
-          bookings = JSON.parse(saved);
-        } else {
-          bookings = [];
-        }
-        bookings.sort((a, b) => b.id - a.id);
-        renderStats();
-        renderBookings();
-      }
-
-      function renderStats() {
-        const statsDiv = document.getElementById("stats");
-        const total = bookings.length;
-        const pending = bookings.filter((b) => b.status === "待确认").length;
-        const confirmed = bookings.filter((b) => b.status === "已确认").length;
-        statsDiv.innerHTML = `
-            <div class="stat-card"><div class="stat-number">${total}</div><div class="stat-label">总预约</div></div>
-            <div class="stat-card"><div class="stat-number">${pending}</div><div class="stat-label">待确认</div></div>
-            <div class="stat-card"><div class="stat-number">${confirmed}</div><div class="stat-label">已确认</div></div>
-        `;
-      }
-
-      function renderBookings() {
-        const container = document.getElementById("bookingList");
-        if (bookings.length === 0) {
-          container.innerHTML = '<div class="empty-msg">📭 暂无预约记录</div>';
-          return;
-        }
-        container.innerHTML = "";
-        bookings.forEach((booking) => {
-          const item = document.createElement("div");
-          item.className = "booking-item";
-          let statusClass = "";
-          let statusText = booking.status || "待确认";
-          if (statusText === "已确认") statusClass = "confirmed";
-          if (statusText === "已取消") statusClass = "cancelled";
-          item.innerHTML = `
-                <div class="booking-header">
-                    <span class="booking-name">${escapeHtml(booking.name)}</span>
-                    <span class="booking-status ${statusClass}">${statusText}</span>
-                </div>
-                <div class="booking-body">
-                    <div class="booking-info">
-                        <span class="info-tag">📞 ${escapeHtml(booking.phone)}</span>
-                        <span class="info-tag">📅 ${booking.date || "未填"}</span>
-                        <span class="info-tag">🕐 ${booking.time || "未填"}</span>
-                        <span class="info-tag">👥 ${booking.people || "未填"}人</span>
-                        <span class="info-tag">🏠 ${booking.type || "未填"}</span>
-                        ${booking.remark ? `<span class="info-tag">📝 ${escapeHtml(booking.remark)}</span>` : ""}
-                        <span class="info-tag">⏰ ${booking.createTime || ""}</span>
-                    </div>
-                    <div class="booking-actions">
-                        ${statusText === "待确认" ? `<button class="action-btn confirm" onclick="confirmBooking(${booking.id})">✓ 确认</button>` : ""}
-                        ${statusText !== "已取消" ? `<button class="action-btn delete" onclick="cancelBooking(${booking.id})">✗ 取消</button>` : ""}
-                    </div>
-                </div>
-            `;
-          container.appendChild(item);
-        });
-      }
-
-      function confirmBooking(id) {
-        const booking = bookings.find((b) => b.id === id);
-        if (booking) {
-          booking.status = "已确认";
-          saveAndRefresh();
-        }
-      }
-
-      function cancelBooking(id) {
-        if (confirm("确定取消这个预约吗？")) {
-          const booking = bookings.find((b) => b.id === id);
-          if (booking) {
-            booking.status = "已取消";
-            saveAndRefresh();
-          }
-        }
-      }
-
-      function saveAndRefresh() {
-        localStorage.setItem("kuaileBookings", JSON.stringify(bookings));
-        loadBookings();
-      }
-
-      function escapeHtml(str) {
-        if (!str) return "";
-        return str.replace(/[&<>]/g, (m) =>
-          m === "&" ? "&amp;" : m === "<" ? "&lt;" : "&gt;",
+      async function load() {
+        const res = await fetch(
+          `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
+          {
+            headers: { "X-Master-Key": API_KEY },
+          },
         );
+        const data = await res.json();
+        const list = data.record?.bookings || [];
+        document.getElementById("bookingList").innerHTML =
+          list
+            .map((b) => `<div>${b.name} ${b.phone} ${b.date}</div>`)
+            .join("") || "暂无预约";
       }
-
-      function login() {
-        const pwd = document.getElementById("password").value;
-        if (pwd === ADMIN_PASSWORD) {
-          sessionStorage.setItem("adminLoggedIn", "true");
-          loadBookings();
-          document.getElementById("loginPanel").style.display = "none";
-          document.getElementById("adminPanel").style.display = "block";
-        } else {
-          document.getElementById("loginError").innerText = "密码错误";
-        }
-      }
-
-      function logout() {
-        sessionStorage.removeItem("adminLoggedIn");
-        document.getElementById("loginPanel").style.display = "block";
-        document.getElementById("adminPanel").style.display = "none";
-        document.getElementById("password").value = "";
-        document.getElementById("loginError").innerText = "";
-      }
+      load();
+      setInterval(load, 8000);
     </script>
   </body>
 </html>
