@@ -149,9 +149,6 @@
         background: #c23b22;
         border-radius: 4px;
       }
-      .category-nav::-webkit-scrollbar {
-        display: none;
-      }
       .category-item {
         display: inline-block;
         padding: 6px 16px;
@@ -288,6 +285,8 @@
         max-width: 400px;
         padding: 24px;
         text-align: center;
+        max-height: 80vh;
+        overflow-y: auto;
       }
       .modal-content h3 {
         color: #c23b22;
@@ -318,6 +317,7 @@
       }
       .modal-content .close-modal {
         background: #8b7355;
+        margin-top: 8px;
       }
       .address-card {
         background: #fff5ea;
@@ -346,8 +346,6 @@
         padding: 40px;
         color: #8b7355;
       }
-
-      /* 回到顶部按钮 */
       .back-to-top {
         position: fixed;
         bottom: 80px;
@@ -374,12 +372,6 @@
         opacity: 1;
         visibility: visible;
       }
-      .back-to-top:hover {
-        background: #a0351e;
-        transform: scale(1.05);
-      }
-
-      /* 自适应布局 */
       @media (max-width: 480px) {
         .store-name {
           font-size: 1.5rem;
@@ -401,15 +393,7 @@
           padding: 4px 12px;
           font-size: 0.75rem;
         }
-        .cart-bar {
-          padding: 10px 16px;
-        }
-        .cart-total {
-          padding: 4px 10px;
-          font-size: 0.8rem;
-        }
       }
-
       @media (max-width: 380px) {
         .menu-item {
           flex-wrap: wrap;
@@ -417,14 +401,9 @@
         .menu-img {
           width: 100%;
           height: 120px;
-          object-fit: cover;
         }
         .menu-info {
           width: 100%;
-        }
-        .add-btn,
-        .quantity-control {
-          margin-top: 8px;
         }
       }
     </style>
@@ -467,6 +446,7 @@
         <span>🛒 购物车</span>
         <span class="cart-total" id="cartTotalBtn">¥0</span>
       </div>
+
       <div id="cartModal" class="modal">
         <div class="modal-content">
           <h3>🛒 我的点单</h3>
@@ -477,14 +457,25 @@
               font-weight: bold;
               margin: 12px 0;
               color: #c23b22;
+              display: flex;
+              justify-content: space-between;
             "
           >
-            总计：<span id="cartTotalPrice">¥0</span>
+            <span>总计：<span id="cartTotalPrice">¥0</span></span>
+            <span id="cartItemCount">(0道菜)</span>
           </div>
-          <button class="submit-order" id="submitOrderBtn">📝 确认下单</button>
+          <div style="display: flex; gap: 10px">
+            <button id="clearCartBtn" style="background: #8b7355; flex: 1">
+              🗑️ 清空
+            </button>
+            <button id="submitOrderBtn" style="background: #c23b22; flex: 2">
+              📝 确认下单
+            </button>
+          </div>
           <button class="close-modal" id="closeCartBtn">继续点菜</button>
         </div>
       </div>
+
       <div id="bookingModal" class="modal">
         <div class="modal-content">
           <h3>📝 预约订桌</h3>
@@ -524,8 +515,7 @@
       </div>
     </div>
 
-    <!-- 回到顶部按钮 -->
-    <button class="back-to-top" id="backToTopBtn" title="回到顶部">↑</button>
+    <button class="back-to-top" id="backToTopBtn">↑</button>
 
     <script>
       const urlParams = new URLSearchParams(window.location.search);
@@ -547,9 +537,6 @@
         "肥肠鸡",
         "红烧鳝段",
         "黄鳝锅",
-        "牛排锅",
-        "甲鱼锅",
-        "牛腩锅",
       ];
 
       function updateStatus() {
@@ -681,25 +668,39 @@
           (sum, item) => sum + item.price * item.quantity,
           0,
         );
+        const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
         document.getElementById("cartTotalBtn").innerHTML = `¥${total}`;
         document.getElementById("cartTotalPrice").innerHTML = `¥${total}`;
+        document.getElementById("cartItemCount").innerHTML =
+          `(${itemCount}道菜)`;
 
         const cartItemsDiv = document.getElementById("cartItems");
         if (cart.length === 0) {
-          cartItemsDiv.innerHTML =
-            '<div style="text-align:center; padding:20px; color:#8b7355;">暂无菜品</div>';
+          cartItemsDiv.innerHTML = `
+                <div style="text-align:center; padding:40px 20px;">
+                    <div style="font-size:3rem; margin-bottom:10px;">🛒</div>
+                    <div style="color:#8b7355;">购物车还是空的</div>
+                    <div style="font-size:0.75rem; color:#b8a88a; margin-top:5px;">快去加点好吃的吧~</div>
+                </div>
+            `;
         } else {
           cartItemsDiv.innerHTML = cart
             .map(
               (item) => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f0e4d4;">
-                    <div style="flex:1;">${escapeHtml(item.name)}</div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <button class="qty-btn" data-action="remove" data-name="${escapeHtml(item.name)}">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="qty-btn" data-action="add" data-name="${escapeHtml(item.name)}" data-price="${item.price}" data-img="${item.img}">+</button>
-                        <span style="width:60px; text-align:right">¥${item.price * item.quantity}</span>
+                <div style="display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid #f0e4d4;">
+                    <div style="width:50px; height:50px; background:#f0e4d4; border-radius:10px; overflow:hidden; flex-shrink:0;">
+                        <img src="${item.img || "https://picsum.photos/50/50?random=1"}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://picsum.photos/50/50?random=1'">
                     </div>
+                    <div style="flex:1;">
+                        <div style="font-weight:500;">${escapeHtml(item.name)}</div>
+                        <div style="font-size:0.7rem; color:#c23b22;">¥${item.price}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="qty-btn" data-action="remove" data-name="${escapeHtml(item.name)}" style="background:#f0e4d4; border:none; width:28px; height:28px; border-radius:50%; font-size:1rem; cursor:pointer;">-</button>
+                        <span style="min-width:24px; text-align:center;">${item.quantity}</span>
+                        <button class="qty-btn" data-action="add" data-name="${escapeHtml(item.name)}" data-price="${item.price}" data-img="${item.img}" style="background:#f0e4d4; border:none; width:28px; height:28px; border-radius:50%; font-size:1rem; cursor:pointer;">+</button>
+                    </div>
+                    <div style="min-width:65px; text-align:right; font-weight:500; color:#c23b22;">¥${item.price * item.quantity}</div>
                 </div>
             `,
             )
@@ -775,8 +776,7 @@
       function renderCategoryNav(menuData) {
         const nav = document.getElementById("categoryNav");
         nav.innerHTML = "";
-        const categories = Object.keys(menuData);
-        categories.forEach((cat) => {
+        Object.keys(menuData).forEach((cat) => {
           const span = document.createElement("span");
           span.className = "category-item";
           span.textContent = cat;
@@ -788,10 +788,7 @@
               const elementPosition = target.getBoundingClientRect().top;
               const offsetPosition =
                 elementPosition + window.pageYOffset - offset;
-              window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth",
-              });
+              window.scrollTo({ top: offsetPosition, behavior: "smooth" });
             }
           };
           nav.appendChild(span);
@@ -801,7 +798,6 @@
       function observeCategories() {
         const sections = document.querySelectorAll(".section");
         const navItems = document.querySelectorAll(".category-item");
-
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -819,7 +815,6 @@
           },
           { threshold: 0.3, rootMargin: "-70px 0px 0px 0px" },
         );
-
         sections.forEach((section) => observer.observe(section));
       }
 
@@ -877,6 +872,18 @@
         cartModal.classList.remove("show");
       cartModal.onclick = (e) => {
         if (e.target === cartModal) cartModal.classList.remove("show");
+      };
+
+      // 清空购物车
+      document.getElementById("clearCartBtn").onclick = () => {
+        if (cart.length === 0) return;
+        if (confirm("确定要清空购物车吗？")) {
+          cart = [];
+          saveCart();
+          cartModal.classList.remove("show");
+          applyFilter();
+          updateCartUI();
+        }
       };
 
       // 提交订单
@@ -961,7 +968,7 @@
         document.getElementById("bookingRemark").value = "";
       };
 
-      // 回到顶部功能
+      // 回到顶部
       const backToTopBtn = document.getElementById("backToTopBtn");
       window.addEventListener("scroll", () => {
         if (window.pageYOffset > 300) {
@@ -970,11 +977,9 @@
           backToTopBtn.classList.remove("show");
         }
       });
-      backToTopBtn.onclick = () => {
+      backToTopBtn.onclick = () =>
         window.scrollTo({ top: 0, behavior: "smooth" });
-      };
 
-      // 监听菜单更新
       window.addEventListener("storage", (e) => {
         if (e.key === "kuaileMenu") loadMenu();
       });
